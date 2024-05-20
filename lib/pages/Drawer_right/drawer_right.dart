@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:route_between_two_points/pages/widget/style.dart';
+import 'package:Tems/pages/widget/style.dart';
 
 import '../../utils/style.dart';
 

@@ -8,18 +8,19 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:route_between_two_points/config/config.dart';
-import 'package:route_between_two_points/config/data.dart';
-import 'package:route_between_two_points/model/data_model/sensor_by_station_Id.dart';
-import 'package:route_between_two_points/pages/Statistics/widgets/linechart.dart';
-import 'package:route_between_two_points/pages/widget/style.dart';
-import '../../bool/services/encrypt.dart';
-import '../../bool/services/refresh_service.dart';
+import 'package:Tems/config/config.dart';
+import 'package:Tems/config/data.dart';
+import 'package:Tems/model/data_model/sensor_by_station_Id.dart';
+import 'package:Tems/pages/Statistics/widgets/linechart.dart';
+import 'package:Tems/pages/widget/style.dart';
+import '../../services/encrypt.dart';
+import '../../services/refresh_service.dart';
 import '../../controllers/key_controller.dart';
 import '../../model/chart_model.dart';
 import '../../model/data_model/report_static_model.dart';
 import '../../utils/style.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 
 class MapView extends StatefulWidget {
   const MapView({super.key});
@@ -35,15 +36,34 @@ class _MapViewState extends State<MapView> {
   List<String> updateddate = [];
   bool isLoading = false;
   bool isOpen = false;
+  String _displayedDate = "";
   String paraName = '';
   String dataa = '';
   String unit = '';
+  String dateRage = "";
 
   @override
   void initState() {
     super.initState();
 
     getSensorDetails();
+  }
+
+  void _setDate() {
+    final DateTime now = DateTime.now();
+    final DateFormat formatter =
+        DateFormat('yyyy-MM-ddTHH:mm:ss'); // Define the format
+    final DateFormat formatterr = DateFormat('yyyy-MM-dd');
+
+    if (now.day > 6) {
+      _displayedDate = formatter.format(now.subtract(const Duration(days: 6)));
+      dateRage =
+          "${formatterr.format(now.subtract(const Duration(days: 6)))} to ${formatterr.format(now)}";
+      dataEncrypt(1, _displayedDate, formatter.format(now));
+      setState(() {});
+    } else {
+      _displayedDate = formatter.format(now);
+    }
   }
 
   Future<void> getSensorDetails() async {
@@ -82,14 +102,17 @@ class _MapViewState extends State<MapView> {
         for (var sens in senss) {
           List<SensorParameters> senpar = sens.sensorParameters;
           for (var dates in senpar) {
-            String dateTime = '${dates.Date} ${dates.Time.trim()}';
+            String timest = dates.Time;
+            List<String> timeMid = timest.split(":");
+            String time = timeMid.sublist(0, 2).join(':');
+            String dateTime = '${dates.Date}  $time';
             updateddate.add(dateTime);
           }
         }
         setState(() {
           isLoading = false;
         });
-        dataEncrypt(1, '2024-03-03T12:12:50', '2024-04-25T12:12:50');
+        _setDate();
       }
     } else {
       throw Exception('error');
@@ -130,17 +153,20 @@ class _MapViewState extends State<MapView> {
         List<RSensorss> one = sensor.sensors;
         for (var param in one) {
           List<RSensorParameters> two = param.sensorParameters;
-          for (var sens in two) {
-            paraName = sens.ParamName;
-            dataa = sens.Data;
-            unit = sens.Unit;
+          for (var senss in two) {
+            paraName = senss.ParamName;
+            unit = senss.Unit;
+            List<RsensorDataPoint> sensss = senss.datapoints;
+            for (var sens in sensss) {
+              dataa = sens.Data;
 
-            final chartDatas = ChartData(
-              DateTime.parse(sens.Date),
-              double.parse(sens.Data),
-            );
-            chartData.add(chartDatas);
-            Keys().chartDataSet(chartData);
+              final chartDatas = ChartData(
+                DateTime.parse("${sens.Date}T${sens.Time}"),
+                double.parse(sens.Data),
+              );
+              chartData.add(chartDatas);
+              Keys().chartDataSet(chartData);
+            }
             setState(() {
               isLoading = false;
             });
@@ -209,12 +235,32 @@ class _MapViewState extends State<MapView> {
                   top: 200,
                   left: 3,
                   child: Container(
-                    height: 200,
-                    width: 250,
+                    height: 350,
+                    width: 350,
                     decoration: const BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.all(Radius.circular(15))),
-                    child: const ChartF(),
+                    child: Column(
+                      children: [
+                        const ChartFm(
+                          isSelected: false,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
+                              height: 15,
+                              width: 30,
+                              color: AppColor.Blue,
+                            ),
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            Text(dateRage),
+                          ],
+                        )
+                      ],
+                    ),
                   ))
           ]);
   }
@@ -256,7 +302,6 @@ class _MapViewState extends State<MapView> {
                     ],
                   ),
                 ),
-
                 const SizedBox(
                   height: 10,
                 ),
@@ -300,96 +345,6 @@ class _MapViewState extends State<MapView> {
                     ),
                   ),
                 )
-
-                // ListTile(
-                //   // leading: Icon(Icons.music_note),
-                //   title: Row(
-                //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                //     children: [
-                //       SizedBox(
-                //         height: 100,
-                //         width: 140,
-                //         child: Column(
-                //             crossAxisAlignment: CrossAxisAlignment.start,
-                //             mainAxisAlignment: MainAxisAlignment.center,
-                //             children: [
-                //               Text(
-                //                 '35.4',
-                //                 style: GoogleFonts.ubuntu(
-                //                     color: AppColor.Blue, fontSize: 20),
-                //               ),
-                //               Column(
-                //                 mainAxisAlignment: MainAxisAlignment.center,
-                //                 crossAxisAlignment: CrossAxisAlignment.center,
-                //                 children: [
-                //                   Text(
-                //                     'Temperature',
-                //                     style: GoogleFonts.ubuntu(fontSize: 16),
-                //                   ),
-                //                   Text(
-                //                     '°C',
-                //                     style: GoogleFonts.ubuntu(fontSize: 12),
-                //                   )
-                //                 ],
-                //               ),
-                //             ]),
-                //       ),
-                //       // Spacer(),
-
-                //       SizedBox(
-                //         height: 100,
-                //         width: 140,
-                //         child: Column(
-                //             crossAxisAlignment: CrossAxisAlignment.start,
-                //             mainAxisAlignment: MainAxisAlignment.center,
-                //             children: [
-                //               Text(
-                //                 '-',
-                //                 style: GoogleFonts.ubuntu(
-                //                     color: AppColor.Blue, fontSize: 20),
-                //               ),
-                //               Column(
-                //                 mainAxisAlignment: MainAxisAlignment.center,
-                //                 crossAxisAlignment: CrossAxisAlignment.center,
-                //                 children: [
-                //                   Text(
-                //                     'Pressure',
-                //                     style: GoogleFonts.ubuntu(fontSize: 16),
-                //                   ),
-                //                   Text(
-                //                     'Psi',
-                //                     style: GoogleFonts.ubuntu(fontSize: 12),
-                //                   )
-                //                 ],
-                //               ),
-                //             ]),
-                //       )
-                //     ],
-                //   ),
-                //   onTap: () {
-                //     // Do something
-                //     Navigator.pop(context);
-                //   },
-                // ),
-                // ListTile(
-                //   title: Container(
-                //     height: 40,
-                //     width: MediaQuery.of(context).size.width,
-                //     decoration: BoxDecoration(
-                //         borderRadius:
-                //             const BorderRadius.all(Radius.circular(10)),
-                //         border: Border.all(color: AppColor.Blue, width: 1)),
-                //     child: Center(
-                //         child: Icon(
-                //       Icons.add,
-                //       color: AppColor.Blue,
-                //     )),
-                //   ),
-                //   onTap: () {
-                //     // Do something
-                //     Navigator.pop(context);
-                //   },
-                // ),
               ],
             ),
           ),

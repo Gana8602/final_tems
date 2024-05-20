@@ -5,12 +5,11 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import 'package:route_between_two_points/bool/services/logout_service.dart';
-import 'package:route_between_two_points/config/data.dart';
-import 'package:route_between_two_points/pages/home.dart';
-import 'package:route_between_two_points/pages/reports/report.dart';
-import 'package:route_between_two_points/pages/widget/drawer_left/widget/item.dart';
-import 'package:route_between_two_points/pages/widget/drawer_left/widget/notify.dart';
+import 'package:Tems/services/logout_service.dart';
+import 'package:Tems/config/data.dart';
+import 'package:Tems/pages/home.dart';
+import 'package:Tems/pages/reports/report.dart';
+import 'package:Tems/pages/widget/drawer_left/widget/item.dart';
 
 import '../../../utils/style.dart';
 import '../../Statistics/statistics.dart';
@@ -62,7 +61,6 @@ class Drawerleft extends StatelessWidget {
                           child: ListTile(
                             title: const Text('Powered by'),
                             subtitle: const Text('Tridel Technologies'),
-                            trailing: const Icon(Icons.delete),
                             leading: Image.asset('assets/image/logo2.png'),
                           ),
                         ),
@@ -92,13 +90,13 @@ class Drawerleft extends StatelessWidget {
                                 fit: BoxFit.cover)),
                       ),
                       Text(
-                        'Admin',
+                        Data.userName.toUpperCase(),
                         style: GoogleFonts.ubuntu(
                           color: Colors.white,
                         ),
                       ),
                       Text(
-                        'ADMINISTRATOR',
+                        Data.roleName.toUpperCase(),
                         style: GoogleFonts.ubuntu(
                           color: Colors.white,
                         ),

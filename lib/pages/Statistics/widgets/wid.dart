@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
@@ -11,12 +12,22 @@ class ChartWidget extends GetxController {
     enableAutoIntervalOnZooming: true,
   );
   final y = const NumericAxis(
-    interval: 1,
+    title: AxisTitle(
+      text: 'm',
+      alignment: ChartAlignment.center, // Align the title to the far end
+      textStyle: TextStyle(
+        fontSize: 12, // Adjust the font size as needed
+      ),
+    ),
+    isVisible: true,
+    interval: 0.5,
+    majorGridLines: MajorGridLines(width: 0),
+    minorGridLines: MinorGridLines(width: 0),
   );
   final zoom = ZoomPanBehavior(
-      enableMouseWheelZooming: true,
+      enableMouseWheelZooming: false,
       enablePinching: true,
       enablePanning: true,
       enableDoubleTapZooming: true,
-      enableSelectionZooming: true);
+      enableSelectionZooming: false);
 }

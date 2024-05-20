@@ -1,12 +1,9 @@
 // ignore_for_file: file_names, deprecated_member_use
 
 import 'dart:io';
-
 import 'package:flutter/material.dart';
-
 import 'package:google_fonts/google_fonts.dart';
-import 'package:route_between_two_points/bool/services/login_service.dart';
-
+import 'package:Tems/services/login_service.dart';
 import '../../utils/style.dart';
 
 class LoginPage extends StatefulWidget {
@@ -31,6 +28,7 @@ class _LoginPageState extends State<LoginPage> {
         body: SafeArea(
           child: SingleChildScrollView(
             child: Container(
+              height: MediaQuery.of(context).size.height,
               decoration: const BoxDecoration(
                   image: DecorationImage(
                       image: AssetImage('assets/image/back.jpg'),
@@ -39,7 +37,7 @@ class _LoginPageState extends State<LoginPage> {
                   child: Padding(
                 padding: const EdgeInsets.all(22.0),
                 child: Container(
-                  height: MediaQuery.of(context).size.height / 1.2,
+                  height: MediaQuery.of(context).size.height / 1.4,
                   decoration: const BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -125,9 +123,27 @@ class _LoginPageState extends State<LoginPage> {
                                   color: Colors.grey.withOpacity(0.1),
                                 ),
                                 child: TextField(
-                                  obscureText: true,
+                                  obscureText: novisible,
                                   controller: _pass,
                                   decoration: InputDecoration(
+                                    suffixIcon: novisible
+                                        ? IconButton(
+                                            icon: const Icon(
+                                                Icons.visibility_off),
+                                            onPressed: () {
+                                              setState(() {
+                                                novisible = !novisible;
+                                              });
+                                            },
+                                          )
+                                        : IconButton(
+                                            icon: const Icon(Icons.visibility),
+                                            onPressed: () {
+                                              setState(() {
+                                                novisible = !novisible;
+                                              });
+                                            },
+                                          ),
                                     labelText: 'Password',
                                     prefixIcon: const Icon(Icons.lock_open),
                                     contentPadding: const EdgeInsets.symmetric(

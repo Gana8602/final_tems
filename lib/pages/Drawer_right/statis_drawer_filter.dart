@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:multi_dropdown/multiselect_dropdown.dart';
-import 'package:route_between_two_points/config/data.dart';
+import 'package:Tems/config/data.dart';
 
 import '../widget/toast.dart';
 
@@ -38,10 +38,10 @@ class _StaticticDrawerFilterState extends State<StaticticDrawerFilter> {
     'Oxygen Reduction Potential',
     'External Voltage'
   ];
-  List<ValueItem> items = Data.stationNameswithId
+  List<ValueItem> iTems = Data.stationNameswithId
       .map((e) => ValueItem(label: e['name'], value: e['id'].toString()))
       .toList();
-  List<ValueItem> items2 =
+  List<ValueItem> iTems2 =
       Data.parameter.map((e) => ValueItem(label: e, value: e)).toList();
 
   DateTime? _selectedDateTime;
@@ -89,10 +89,9 @@ class _StaticticDrawerFilterState extends State<StaticticDrawerFilter> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    selectedStation = [items.first];
-    selectedParameter = [items2.first];
+    selectedStation = [iTems.first];
+    selectedParameter = [iTems2.first];
   }
 
   bool istick = false;
@@ -142,13 +141,13 @@ class _StaticticDrawerFilterState extends State<StaticticDrawerFilter> {
                           // Replace 'item' with the property containing the value
                         }
                       },
-                      options: items,
+                      options: iTems,
                       backgroundColor: Colors.white10,
                       selectionType: SelectionType.multi,
                       chipConfig: const ChipConfig(wrapType: WrapType.wrap),
                       dropdownHeight: 300,
                       optionTextStyle: GoogleFonts.ubuntu(fontSize: 16),
-                      selectedOptions: istick ? items : [],
+                      selectedOptions: istick ? iTems : [],
                       showChipInSingleSelectMode: true,
                       selectedOptionIcon: const Icon(Icons.check_circle),
                     ),
@@ -269,7 +268,7 @@ class _StaticticDrawerFilterState extends State<StaticticDrawerFilter> {
                         onOptionSelected: (options) {
                           debugPrint(options.toString());
                         },
-                        options: items2,
+                        options: iTems2,
                         backgroundColor: Colors.white10,
                         selectionType: SelectionType.multi,
                         chipConfig: const ChipConfig(wrapType: WrapType.wrap),
@@ -282,7 +281,7 @@ class _StaticticDrawerFilterState extends State<StaticticDrawerFilter> {
                     ],
                   ),
                 ),
-                Spacer(),
+                const Spacer(),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,

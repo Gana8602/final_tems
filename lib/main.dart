@@ -1,12 +1,11 @@
 // ignore_for_file: camel_case_types, non_constant_identifier_names
 
-import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:oktoast/oktoast.dart';
-import 'package:route_between_two_points/pages/auth/Login_page.dart';
+import 'package:Tems/pages/auth/Login_page.dart';
 
 import 'pages/widget/splash_anim.dart';
 import 'utils/style.dart';
@@ -58,11 +57,11 @@ class _SplashState extends State<Splash> {
     Future.delayed(const Duration(seconds: 5), () {
       Navigator.of(context).pushReplacement(
         PageRouteBuilder(
-          pageBuilder: (_, __, ___) => LoginPage(),
+          pageBuilder: (_, __, ___) => const LoginPage(),
           transitionsBuilder: (_, animation, __, child) {
             return SlideTransition(
               position: Tween<Offset>(
-                begin: Offset(-1.0, 0.0),
+                begin: const Offset(-1.0, 0.0),
                 end: Offset.zero,
               ).animate(animation),
               child: child,
@@ -101,23 +100,20 @@ class _SplashState extends State<Splash> {
                 duration: const Duration(milliseconds: 2000),
                 repeat: true,
                 animate: true,
+                glowShape: BoxShape.circle,
                 // showTwoGlows: true,
                 startDelay: const Duration(milliseconds: 100),
                 child: Material(
                   elevation: 8.0,
                   shape: const CircleBorder(),
-                  child: CircleAvatar(
-                    backgroundColor: Colors.transparent,
-                    radius: 45.0,
-                    child: Padding(
-                      padding: const EdgeInsets.only(bottom: 10),
-                      child: Image.asset(
-                        'assets/image/logo2.png',
-                        fit: BoxFit.cover,
-                        // color: Colors.blue,
-                        height: 65,
-                      ),
-                    ),
+                  child: Container(
+                    height: 110,
+                    width: 110,
+                    decoration: const BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(55)),
+                        image: DecorationImage(
+                            image: AssetImage('assets/image/logooo.png'),
+                            fit: BoxFit.cover)),
                   ),
                 ),
               ),
@@ -134,7 +130,7 @@ class _SplashState extends State<Splash> {
               ),
               Center(
                   child: Text(
-                'T E M S',
+                'T R I D E L',
                 style: TextStyle(
                     fontSize: 30,
                     fontWeight: FontWeight.bold,

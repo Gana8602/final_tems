@@ -379,13 +379,13 @@
 			path = Projects;
 			sourceTree = "<group>";
 		};
-		2EAF5ADFC0FD90CF673BBFB01BC75CA4 /* tems-march */ = {
+		2EAF5ADFC0FD90CF673BBFB01BC75CA4 /* Tems-march */ = {
 			isa = PBXGroup;
 			children = (
 				370E21A84B614FEA8E69EE0624073AA1 /* macos */,
 			);
-			name = "tems-march";
-			path = "tems-march";
+			name = "Tems-march";
+			path = "Tems-march";
 			sourceTree = "<group>";
 		};
 		2FB9AB10EF168A60076AE6222C63EE02 /* .. */ = {
@@ -400,7 +400,7 @@
 		31162F339ED8B13B61AD73A1CB7CAD67 /* Gana */ = {
 			isa = PBXGroup;
 			children = (
-				F624FEBDFD51B86523DE5B0BAFE90BC5 /* tems-march */,
+				F624FEBDFD51B86523DE5B0BAFE90BC5 /* Tems-march */,
 			);
 			name = Gana;
 			path = Gana;
@@ -467,7 +467,7 @@
 		51E997DC939D2AEF68F00A18EDA045FF /* Gana */ = {
 			isa = PBXGroup;
 			children = (
-				2EAF5ADFC0FD90CF673BBFB01BC75CA4 /* tems-march */,
+				2EAF5ADFC0FD90CF673BBFB01BC75CA4 /* Tems-march */,
 			);
 			name = Gana;
 			path = Gana;
@@ -881,7 +881,7 @@
 		DA260443B2F84303B39B95561E89FDDD /* Gana */ = {
 			isa = PBXGroup;
 			children = (
-				E13BADD361BFBD35ADA1A23E37D84469 /* tems-march */,
+				E13BADD361BFBD35ADA1A23E37D84469 /* Tems-march */,
 			);
 			name = Gana;
 			path = Gana;
@@ -904,13 +904,13 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		E13BADD361BFBD35ADA1A23E37D84469 /* tems-march */ = {
+		E13BADD361BFBD35ADA1A23E37D84469 /* Tems-march */ = {
 			isa = PBXGroup;
 			children = (
 				A2225BF0BCA97C7B357EA1CCAC564FB5 /* macos */,
 			);
-			name = "tems-march";
-			path = "tems-march";
+			name = "Tems-march";
+			path = "Tems-march";
 			sourceTree = "<group>";
 		};
 		E26B20D503210DE87EFC98642AA7E487 /* .. */ = {
@@ -982,13 +982,13 @@
 			path = "../../../../../../Pods/Target Support Files/path_provider_foundation";
 			sourceTree = "<group>";
 		};
-		F624FEBDFD51B86523DE5B0BAFE90BC5 /* tems-march */ = {
+		F624FEBDFD51B86523DE5B0BAFE90BC5 /* Tems-march */ = {
 			isa = PBXGroup;
 			children = (
 				053EA5F2EADA0417DA6CF296A1282B59 /* macos */,
 			);
-			name = "tems-march";
-			path = "tems-march";
+			name = "Tems-march";
+			path = "Tems-march";
 			sourceTree = "<group>";
 		};
 		F777534C2915BDFBE1110F432C212F1B /* .. */ = {

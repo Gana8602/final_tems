@@ -1,0 +1,182 @@
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:Tems/pages/Statistics/widgets/sampledata.dart';
+import 'package:Tems/pages/Statistics/widgets/wid.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
+
+import '../../../model/chart_model.dart';
+
+class LineChartView extends StatelessWidget {
+  const LineChartView({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const ChartF();
+  }
+}
+
+class ChartF extends StatefulWidget {
+  const ChartF({super.key});
+
+  @override
+  State<StatefulWidget> createState() => ChartFState();
+}
+
+class ChartFState extends State<ChartF> {
+  final ChartWidget _widget = Get.put(ChartWidget());
+
+  bool dataempty = false;
+  @override
+  Widget build(BuildContext context) {
+    return SfCartesianChart(
+      zoomPanBehavior: _widget.zoom,
+      primaryXAxis: const DateTimeAxis(
+        initialZoomFactor: 1,
+        labelRotation: -45,
+      ),
+      primaryYAxis: _widget.y,
+      title: _widget.title,
+      series: <CartesianSeries>[
+        ScatterSeries<ChartData, DateTime>(
+          dataSource: chartDatafill.chartData,
+          xValueMapper: (ChartData data, _) => data.x, // Cast to double
+          yValueMapper: (ChartData data, _) => data.y,
+
+          markerSettings:
+              MarkerSettings(shape: DataMarkerType.circle, height: 1, width: 1),
+        ),
+      ],
+      tooltipBehavior: _widget.toolTip,
+    );
+  }
+}
+
+
+
+  Future<void> reportDatafetch(String id, String d1, String d2) async {
+    isLoading = true;
+    var response = await http.get(
+        Uri.parse(
+            '${config.baseUrl}${config.ReportData}?stationIds=$id&fromDate=$d1&toDate=$d2'),
+        headers: {
+          "Authorization": config.bearer_token,
+          "apiKey": config.apiKey,
+          "Content-type": "application/json"
+        });
+    if (response.statusCode == 200) {
+      Map<String, dynamic> data = jsonDecode(response.body);
+
+      List<ReportsData> list = (data['stationDetails'] as List)
+          .map((e) => ReportsData.fromJson(e))
+          .toList();
+      Data.stationNameswithId.clear();
+      for (var sensor in list) {
+        stationName = sensor.StationName;
+        String name = sensor.StationName;
+        int id = sensor.StationId;
+        Data.stationNameswithId.add({'name': name, 'id': id});
+
+        List<RSensorss> one = sensor.sensors;
+        for (var param in one) {
+          List<RSensorParameters> two = param.sensorParameters;
+          for (var sensss in two) {
+            List<RsensorDataPoint> senss = sensss.datapoints;
+            for (var sens in senss) {
+              final chartDatas = ChartData(
+                DateTime.parse("${sens.Date}T${sens.Time}"),
+                double.parse(sens.Data),
+              );
+              chartData.add(chartDatas);
+              Keys().chartDataSet(chartData);
+            }
+
+            setState(() {
+              isLoading = false;
+            });
+          }
+        }
+      }
+    } else if (response.statusCode == 401) {
+      RefreshToken().refreshToken();
+    }
+  }
+
+
+
+in the chart only showing like month and date only like apr 12 10 31 21 23 but data saved like this json response
+
+
+{
+    "stationDetails": [
+        {
+            "stationId": 1,
+            "stationName": "Mandwa Station",
+            "stationCode": "MMB01",
+            "latitude": 18.81,
+            "longitude": 72.88,
+            "stationImg": null,
+            "mobilityFlag": true,
+            "stationStatus": null,
+            "locationDetails": "ASDFGHNM",
+            "sensors": [
+                {
+                    "sensorId": 4,
+                    "sensorName": "Tide",
+                    "sensorCode": "WQ",
+                    "sensorTableCode": "",
+                    "sensorParams": [
+                        {
+                            "paramId": 88,
+                            "paramName": "Water Level",
+                            "unit": "m",
+                            "warn": 3.01,
+                            "danger": 6.0,
+                            "min": 0.0,
+                            "max": 10.0,
+                            "settingCode": "",
+                            "dataPoints": [
+                                {
+                                    "data": "3.4002",
+                                    "date": "2024-05-16",
+                                    "time": "12:09:51.135"
+                                },
+                                {
+                                    "data": "3.4263",
+                                    "date": "2024-05-16",
+                                    "time": "12:09:50.994"
+                                },
+                                {
+                                    "data": "3.4263",
+                                    "date": "2024-05-16",
+                                    "time": "12:07:50.156"
+                                },
+                                {
+                                    "data": "3.4263",
+                                    "date": "2024-05-16",
+                                    "time": "12:06:49.428"
+                                },
+                                {
+                                    "data": "3.4243",
+                                    "date": "2024-05-16",
+                                    "time": "12:05:48.695"
+                                },
+                                {
+                                    "data": "3.4194",
+                                    "date": "2024-05-16",
+                                    "time": "12:04:47.973"
+                                },
+                                {
+                                    "data": "3.4542",
+                                    "date": "2024-05-16",
+                                    "time": "12:03:47.269"
+                                },
+                                ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
+
+i want to show original date which saved in chartdata

@@ -1,10 +1,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
 
-    package="com.example.route_between_two_points">
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    package="com.mmb.tems">
+    <uses-permission android:name="android.permission.INTERNET"/>
 
    <application
-        android:label="route_between_two_points"
+        android:label="Tems"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

@@ -2,7 +2,7 @@
 
 class config {
   static const String apiKey = 'JyAaLfpOMxa6mi8NgmtqXrNfbIMXR2yRyVzxji7Oo54=';
-  static const String baseUrl = 'http://apitems.homeunix.com:8090';
+  static const String baseUrl = 'http://mmbapp.tridelespecia.com';
   static const String login = '/api/auth/login';
   static const String logout = '/api/logout';
   static const String allStations = '/api/stations/getAllStations';

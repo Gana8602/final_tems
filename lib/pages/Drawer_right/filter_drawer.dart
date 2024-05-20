@@ -4,11 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:multi_dropdown/multiselect_dropdown.dart';
-import 'package:route_between_two_points/config/data.dart';
-import 'package:route_between_two_points/pages/Drawer_right/widget/date_widg.dart';
-import 'package:route_between_two_points/pages/widget/toast.dart';
-
-import '../../utils/style.dart';
+import 'package:Tems/config/data.dart';
+import 'package:Tems/pages/Drawer_right/widget/date_widg.dart';
+import 'package:Tems/pages/widget/toast.dart';
 
 class FilterDrawer extends StatefulWidget {
   final Function(String, String, int) onFilterSelected;
@@ -131,12 +129,12 @@ class _FilterDrawerState extends State<FilterDrawer> {
     super.initState();
     generateYearDropdown();
 
-    selectedStation = [items.first];
+    selectedStation = [iTems.first];
   }
 
   List<ValueItem>? selectedStation;
 
-  List<ValueItem> items = Data.stationNameswithId
+  List<ValueItem> iTems = Data.stationNameswithId
       .map((e) => ValueItem(label: e['name'], value: e['id'].toString()))
       .toList();
 
@@ -164,7 +162,7 @@ class _FilterDrawerState extends State<FilterDrawer> {
                   )
                 ],
               )),
-              Divider(
+              const Divider(
                 color: Colors.grey,
               ),
               ListTile(
@@ -180,7 +178,7 @@ class _FilterDrawerState extends State<FilterDrawer> {
                     // Replace 'item' with the property containing the value
                   }
                 },
-                options: items,
+                options: iTems,
                 backgroundColor: Colors.white10,
                 selectionType: SelectionType.multi,
                 chipConfig: const ChipConfig(wrapType: WrapType.wrap),
@@ -188,7 +186,7 @@ class _FilterDrawerState extends State<FilterDrawer> {
                 optionTextStyle: GoogleFonts.ubuntu(fontSize: 16),
                 showChipInSingleSelectMode: true,
                 selectedOptionIcon: const Icon(Icons.check_circle),
-                selectedOptions: isTick ? items : [],
+                selectedOptions: isTick ? iTems : [],
               ),
               // ListTile(
               //   title:

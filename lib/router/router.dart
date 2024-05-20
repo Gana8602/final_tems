@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:route_between_two_points/pages/auth/Login_page.dart';
-import 'package:route_between_two_points/pages/dashboard/dashboard.dart';
-import 'package:route_between_two_points/pages/home.dart';
-import 'package:route_between_two_points/router/routes.dart';
+import 'package:Tems/pages/auth/Login_page.dart';
+import 'package:Tems/pages/dashboard/dashboard.dart';
+import 'package:Tems/pages/home.dart';
+import 'package:Tems/router/routes.dart';
 
 Route<dynamic> generateRoute(RouteSettings settings) {
   switch (settings.name) {

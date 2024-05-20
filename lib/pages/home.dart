@@ -5,11 +5,11 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:route_between_two_points/pages/widget/bar.dart';
-import 'package:route_between_two_points/pages/Drawer_right/drawer_right.dart';
-import 'package:route_between_two_points/pages/widget/float_Button.dart';
-import 'package:route_between_two_points/pages/widget/map.dart';
-import '../bool/services/sensors_name_service.dart';
+import 'package:Tems/pages/widget/bar.dart';
+import 'package:Tems/pages/Drawer_right/drawer_right.dart';
+import 'package:Tems/pages/widget/float_Button.dart';
+import 'package:Tems/pages/widget/map.dart';
+import '../services/sensors_name_service.dart';
 import 'widget/drawer_left/drawer_left.dart';
 import 'widget/style.dart';
 
@@ -22,15 +22,16 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final MapStyle controller = Get.put(MapStyle());
-  DateTime time = DateTime.parse('2024-05-03 18:40:48.435635');
+  DateTime time = DateTime.now();
   @override
   void initState() {
     super.initState();
     SensorsNames().SensorName();
-    Future.delayed(const Duration(milliseconds: 300), timer);
+    // Future.delayed(const Duration(milliseconds: 300), timer);
   }
 
   Future<void> timer() async {
+    print("${time.hour}, ${time.minute}");
     if (time.hour >= 6) {
       controller.changeStyle('white');
     } else if (time.hour < 18) {

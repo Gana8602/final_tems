@@ -4,7 +4,6 @@ buildscript {
         google()
         mavenCentral()
     }
-
     dependencies {
         classpath 'com.android.tools.build:gradle:7.2.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
@@ -18,14 +17,17 @@ allprojects {
     }
 }
 
+// Optional: Set a custom build directory for the root project
 rootProject.buildDir = '../build'
+
+// Configure subprojects' build directories to be under the root project's build directory
 subprojects {
     project.buildDir = "${rootProject.buildDir}/${project.name}"
-}
-subprojects {
-    project.evaluationDependsOn(':app')
+    // Optional: This ensures that ':app' is evaluated before other subprojects
+    evaluationDependsOn(':app')
 }
 
+// Register a clean task to delete the build directory
 tasks.register("clean", Delete) {
     delete rootProject.buildDir
 }

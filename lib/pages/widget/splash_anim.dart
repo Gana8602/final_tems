@@ -1,4 +1,4 @@
-// ignore_for_file: unnecessary_null_comparison
+// ignore_for_file: unnecessary_null_comparison, library_prefixes, library_private_types_in_public_api
 
 import 'dart:async';
 import 'dart:math';
@@ -10,7 +10,8 @@ import 'package:flutter/services.dart';
 
 class WidgetRingAnimator extends StatefulWidget {
   const WidgetRingAnimator(
-      {required this.child,
+      {super.key,
+      required this.child,
       this.ringColor = Colors.deepOrange,
       this.ringAnimation = Curves.linear,
       this.ringAnimationInSeconds = 30,
@@ -51,14 +52,12 @@ class _WidgetAnimatorState extends State<WidgetRingAnimator>
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Stack(
-        alignment: AlignmentDirectional.center,
-        children: <Widget>[
-          _ringArc(),
-          _child(),
-        ],
-      ),
+    return Stack(
+      alignment: AlignmentDirectional.center,
+      children: <Widget>[
+        _ringArc(),
+        _child(),
+      ],
     );
   }
 
@@ -70,7 +69,7 @@ class _WidgetAnimatorState extends State<WidgetRingAnimator>
 
   Center _child() {
     return Center(
-      child: Container(
+      child: SizedBox(
         width: widget.size * 0.7,
         height: widget.size * 0.7,
         child: widget.child,
@@ -88,7 +87,7 @@ class _WidgetAnimatorState extends State<WidgetRingAnimator>
               iconsSize: widget.ringIconsSize,
               image: image,
               imageColor: widget.ringIconsColor),
-          child: Container(
+          child: SizedBox(
             width: widget.size,
             height: widget.size,
           ),
@@ -122,15 +121,15 @@ class _WidgetAnimatorState extends State<WidgetRingAnimator>
         duration: Duration(seconds: widget.ringAnimationInSeconds),
         vsync: this);
 
-    final _ringAnimation = Tween<double>(begin: -1.0, end: 0.0).animate(
+    final ringAnimation = Tween<double>(begin: -1.0, end: 0.0).animate(
         CurvedAnimation(
             parent: controller,
             curve: Interval(0.0, 1.0, curve: widget.ringAnimation)));
 
     // reverse or same direction animation
     widget.reverse
-        ? animation = ReverseAnimation(_ringAnimation)
-        : animation = _ringAnimation;
+        ? animation = ReverseAnimation(ringAnimation)
+        : animation = ringAnimation;
 
     controller.repeat();
   }

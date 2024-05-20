@@ -65,9 +65,7 @@ class RSensorParameters {
   final double Danger;
   final double Min;
   final double Max;
-  final String Data;
-  final String Date;
-  final String Time;
+  final List<RsensorDataPoint> datapoints;
 
   RSensorParameters(
       {required this.ParamId,
@@ -77,21 +75,31 @@ class RSensorParameters {
       required this.Danger,
       required this.Min,
       required this.Max,
-      required this.Data,
-      required this.Date,
-      required this.Time});
+      required this.datapoints});
 
   factory RSensorParameters.fromJson(Map<String, dynamic> json) {
     return RSensorParameters(
-        ParamId: json['paramId'],
-        ParamName: json['paramName'],
-        Unit: json['unit'],
-        Warn: json['warn'],
-        Danger: json['danger'],
-        Min: json['min'],
-        Max: json['max'],
-        Data: json['data'],
-        Date: json['date'],
-        Time: json['time']);
+      ParamId: json['paramId'],
+      ParamName: json['paramName'],
+      Unit: json['unit'],
+      Warn: json['warn'],
+      Danger: json['danger'],
+      Min: json['min'],
+      Max: json['max'],
+      datapoints: List<RsensorDataPoint>.from(
+          json['dataPoints'].map((dp) => RsensorDataPoint.fromJson(dp))),
+    );
+  }
+}
+
+class RsensorDataPoint {
+  final String Data;
+  final String Date;
+  final String Time;
+  RsensorDataPoint(
+      {required this.Data, required this.Date, required this.Time});
+  factory RsensorDataPoint.fromJson(Map<String, dynamic> json) {
+    return RsensorDataPoint(
+        Data: json['data'], Date: json['date'], Time: json['time']);
   }
 }

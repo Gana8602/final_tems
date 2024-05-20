@@ -6,9 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:multi_dropdown/multiselect_dropdown.dart';
-import 'package:route_between_two_points/config/config.dart';
-import 'package:route_between_two_points/config/data.dart';
-import 'package:route_between_two_points/utils/style.dart';
+import 'package:Tems/config/config.dart';
+import 'package:Tems/config/data.dart';
+import 'package:Tems/utils/style.dart';
 import 'package:http/http.dart' as http;
 import '../../model/data_model/sensor_by_station_Id.dart';
 
@@ -30,17 +30,17 @@ class _AddStationState extends State<AddStation> {
   String Selectedparameter = "";
   List<ValueItem>? SelectedStation;
   List<String> parameter = [];
-  List<ValueItem> items = [];
+  List<ValueItem> iTems = [];
 
   void itemSet() {
-    List<ValueItem> itemss = Data.stationNameswithId
+    List<ValueItem> iTemss = Data.stationNameswithId
         .map((e) => ValueItem(label: e['name'], value: e['id'].toString()))
         .toList();
 
     setState(() {
-      items = itemss;
+      iTems = iTemss;
       isLoading = false;
-      SelectedStation = [items.first];
+      SelectedStation = [iTems.first];
     });
   }
 
@@ -173,12 +173,13 @@ class _AddStationState extends State<AddStation> {
                     onOptionSelected: (options) {
                       debugPrint(options.toString());
                     },
-                    options: items,
+                    options: iTems,
+                    backgroundColor: Colors.white10,
                     selectionType: SelectionType.multi,
                     chipConfig: const ChipConfig(wrapType: WrapType.wrap),
                     dropdownHeight: 300,
                     optionTextStyle: GoogleFonts.ubuntu(fontSize: 16),
-                    selectedOptions: istick ? items : SelectedStation!,
+                    selectedOptions: istick ? iTems : SelectedStation!,
                     showChipInSingleSelectMode: true,
                     selectedOptionIcon: const Icon(Icons.check_circle),
                   ),
@@ -273,11 +274,18 @@ class _AddStationState extends State<AddStation> {
         );
       }).toList(),
       onChanged: onChanged,
-      decoration: const InputDecoration(
-        contentPadding: EdgeInsets.symmetric(horizontal: 10),
+      decoration: InputDecoration(
+        contentPadding: const EdgeInsets.symmetric(horizontal: 10),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(10)),
-          // borderSide: BorderSide(color: Colors.grey.withOpacity(0.3))),
+          borderRadius: BorderRadius.circular(10.0),
+          borderSide: const BorderSide(color: Colors.grey),
+        ),
+        enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10.0),
+            borderSide: const BorderSide(color: Colors.grey)),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10.0),
+          borderSide: const BorderSide(color: Colors.lightBlue),
         ),
       ),
       borderRadius: const BorderRadius.all(Radius.circular(10)),

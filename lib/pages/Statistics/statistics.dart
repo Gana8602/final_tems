@@ -6,21 +6,22 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
-import 'package:route_between_two_points/bool/services/refresh_service.dart';
-import 'package:route_between_two_points/config/config.dart';
-import 'package:route_between_two_points/pages/Drawer_right/drawer_right.dart';
-import 'package:route_between_two_points/pages/Drawer_right/statis_drawer_filter.dart';
-import 'package:route_between_two_points/pages/widget/bar.dart';
-import 'package:route_between_two_points/pages/widget/drawer_left/drawer_left.dart';
-import 'package:route_between_two_points/utils/string.dart';
+import 'package:Tems/services/refresh_service.dart';
+import 'package:Tems/config/config.dart';
+import 'package:Tems/pages/Drawer_right/drawer_right.dart';
+import 'package:Tems/pages/Drawer_right/statis_drawer_filter.dart';
+import 'package:Tems/pages/widget/bar.dart';
+import 'package:Tems/pages/widget/drawer_left/drawer_left.dart';
+import 'package:Tems/utils/string.dart';
 import 'package:http/http.dart' as http;
-import '../../bool/services/encrypt.dart';
+import '../../services/encrypt.dart';
 import '../../config/data.dart';
 import '../../controllers/key_controller.dart';
 import '../../model/chart_model.dart';
 import '../../model/data_model/report_static_model.dart';
 import '../../utils/style.dart';
 import 'widgets/linechart.dart';
+import 'package:intl/intl.dart';
 
 class StatisticsPage extends StatefulWidget {
   const StatisticsPage({
@@ -37,6 +38,9 @@ class _StatisticsPageState extends State<StatisticsPage> {
   final List<ChartData> chartData = [];
   bool isLoading = false;
   String stationName = "";
+  String currentDatestart = '';
+  final DateFormat formater = DateFormat("yyyy-MM-ddTHH:mm:ss");
+  bool isSelect = false;
 
   void dataEncrypt(int id, String d1, String d2) {
     String encId = encryptAES(id.toString(), Data.AesKey);
@@ -77,23 +81,23 @@ class _StatisticsPageState extends State<StatisticsPage> {
         List<RSensorss> one = sensor.sensors;
         for (var param in one) {
           List<RSensorParameters> two = param.sensorParameters;
-          for (var sens in two) {
-            final chartDatas = ChartData(
-              DateTime.parse(sens.Date),
-              double.parse(sens.Data),
-            );
-            chartData.add(chartDatas);
-            Keys().chartDataSet(chartData);
+          for (var sensss in two) {
+            List<RsensorDataPoint> senss = sensss.datapoints;
+            for (var sens in senss) {
+              final chartDatas = ChartData(
+                DateTime.parse("${sens.Date}T${sens.Time}"),
+                double.parse(sens.Data),
+              );
+              chartData.add(chartDatas);
+              Keys().chartDataSet(chartData);
+            }
+
             setState(() {
               isLoading = false;
             });
           }
         }
       }
-
-      // setState(() {
-      //   _users = list;
-      // });
     } else if (response.statusCode == 401) {
       RefreshToken().refreshToken();
     }
@@ -109,6 +113,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
       _selectedStartDate = startDate;
       _selectedEndDate = endDate;
       _selectedStationName = stationName;
+      isSelect = true;
     });
 
     dataEncrypt(_selectedStationName, _selectedStartDate, _selectedEndDate);
@@ -117,7 +122,22 @@ class _StatisticsPageState extends State<StatisticsPage> {
   @override
   void initState() {
     super.initState();
-    dataEncrypt(1, '2024-03-03T12:12:50', '2024-04-25T12:12:50');
+
+    _setDate();
+  }
+
+  String start = "";
+  String end = "";
+  void _setDate() {
+    DateTime now = DateTime.now();
+    String selectedStaretDate =
+        "${DateFormat('yyyy-MM-dd').format(now)}T00:01:02";
+    String selectedendDate = DateFormat('yyyy-MM-ddTHH:mm:ss').format(now);
+    setState(() {
+      start = selectedStaretDate;
+      end = selectedendDate;
+    });
+    dataEncrypt(1, start, end);
   }
 
   Widget DrawerNav2() {
@@ -214,7 +234,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
                                 Icons.filter_alt_outlined,
                                 color: AppColor.Blue,
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 width: 5,
                               ),
                               Text(
@@ -228,25 +248,11 @@ class _StatisticsPageState extends State<StatisticsPage> {
                   ),
                 ],
               ),
-              //
-
-              // Row(
-              //   children: [
-              //     SizedBox(width: 6),
-              //     Text(
-              //       'Water Level',
-              //       style: GoogleFonts.ubuntu(
-              //         color: AppColor.Blue,
-              //         fontSize: 20,
-              //       ),
-              //     ),
-              //   ],
-              // ),
               const SizedBox(
                 height: 15,
               ),
               Container(
-                height: 450,
+                height: 600,
                 width: MediaQuery.of(context).size.width,
                 decoration: const BoxDecoration(
                   color: Colors.white,
@@ -261,7 +267,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
                     Column(
                       children: [
                         Container(
-                          height: 300,
+                          height: 400,
                           width: MediaQuery.of(context).size.width,
                           decoration: const BoxDecoration(
                             color: Colors.white,
@@ -273,7 +279,9 @@ class _StatisticsPageState extends State<StatisticsPage> {
                               ? const Center(
                                   child: CircularProgressIndicator(),
                                 )
-                              : const ChartF(),
+                              : ChartF(
+                                  isSelected: isSelect,
+                                ),
                         ),
                         const SizedBox(
                           height: 10,

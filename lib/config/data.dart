@@ -7,6 +7,8 @@ class Data extends GetxController {
   static List<String> stationNames = [];
   static int UserId = 0;
   static List<String> stationNames2 = [];
+  static String roleName = "";
+  static String userName = "";
   static List<Map<String, dynamic>> stationNameswithId = [];
   static List<String> sensors = [];
   static List<dynamic> dashData = [];

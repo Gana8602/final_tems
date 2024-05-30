@@ -5,7 +5,7 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 class ChartWidget extends GetxController {
   final toolTip =
       TooltipBehavior(enable: true, activationMode: ActivationMode.singleTap);
-  final title = const ChartTitle(text: 'water Level');
+  final title = const ChartTitle(text: 'Tide');
   final x = const NumericAxis(
     interval: 1,
     labelRotation: -47,

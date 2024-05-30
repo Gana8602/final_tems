@@ -51,6 +51,7 @@ class _ExpandableTableExampleState extends State<ExpandableTableExample> {
   List<List<String>> pdfrowData = [];
 
   void dataEncrypt(int id, String d1, String d2) {
+    print("$id,   $d1,    $d2");
     String encId = encryptAES(id.toString(), Data.AesKey);
     String da1 = encryptAES(d1, Data.AesKey);
     String da2 = encryptAES(d2, Data.AesKey);
@@ -59,6 +60,9 @@ class _ExpandableTableExampleState extends State<ExpandableTableExample> {
       Data.date1 = da1;
       Data.date2 = da2;
     });
+    print(encId);
+    print(da1);
+    print(da2);
     reportDatafetch(encId, da1, da2);
   }
 
@@ -391,37 +395,38 @@ class _ExpandableTableExampleState extends State<ExpandableTableExample> {
                         'Tide',
                         style: GoogleFonts.ubuntu(fontSize: 18),
                       ),
-                      InkWell(
-                        onTap: () {},
-                        child: Container(
-                          height: 50,
-                          width: 50,
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius:
-                                  const BorderRadius.all(Radius.circular(10)),
-                              border: Border.all(color: AppColor.Blue)),
-                          child: Center(
-                              child: PopupMenuButton(
-                            icon: Icon(
-                              Icons.file_download_outlined,
-                              color: AppColor.Blue,
-                            ),
-                            itemBuilder: (context) => [
-                              PopupMenuItem(
-                                  onTap: () {
-                                    convertJsonToCsv();
-                                  },
-                                  child: const Text("csv")),
-                              PopupMenuItem(
-                                  onTap: () {
-                                    generatePdf();
-                                  },
-                                  child: const Text("Pdf"))
-                            ],
-                          )),
-                        ),
-                      )
+                      if (Data.role == 'ROLE_ADMIN')
+                        InkWell(
+                          onTap: () {},
+                          child: Container(
+                            height: 50,
+                            width: 50,
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius:
+                                    const BorderRadius.all(Radius.circular(10)),
+                                border: Border.all(color: AppColor.Blue)),
+                            child: Center(
+                                child: PopupMenuButton(
+                              icon: Icon(
+                                Icons.file_download_outlined,
+                                color: AppColor.Blue,
+                              ),
+                              itemBuilder: (context) => [
+                                PopupMenuItem(
+                                    onTap: () {
+                                      convertJsonToCsv();
+                                    },
+                                    child: const Text("csv")),
+                                PopupMenuItem(
+                                    onTap: () {
+                                      generatePdf();
+                                    },
+                                    child: const Text("Pdf"))
+                              ],
+                            )),
+                          ),
+                        )
                     ],
                   ),
                   const SizedBox(
@@ -447,12 +452,12 @@ class _ExpandableTableExampleState extends State<ExpandableTableExample> {
                                 textAlign: TextAlign.center,
                               )),
                               DataColumn(label: Text('Time')),
-                              DataColumn(label: Text('Water Level(m)')),
+                              DataColumn(label: Text('Tide (m)')),
                             ],
                             source: _UserDataSource(
                                 context, filteredUsers, StationName),
                             rowsPerPage: 9,
-                            columnSpacing: 10, // Change as per your requirement
+                            columnSpacing: 15, // Change as per your requirement
                           ),
                   )
                 ]),
@@ -478,7 +483,9 @@ class _UserDataSource extends DataTableSource {
 
     String date = user.Date;
     String time = user.Time;
-    String data = user.Data;
+    String da = user.Data;
+    double dat = double.parse(da);
+    String data = dat.toStringAsFixed(2);
     List<String> timeParts = time.split(':');
     String formattedTime = timeParts.sublist(0, 2).join(':');
 

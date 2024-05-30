@@ -23,20 +23,17 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final MapStyle controller = Get.put(MapStyle());
   DateTime time = DateTime.now();
+  bool _isDisposed = false;
   @override
   void initState() {
     super.initState();
     SensorsNames().SensorName();
-    // Future.delayed(const Duration(milliseconds: 300), timer);
   }
 
-  Future<void> timer() async {
-    print("${time.hour}, ${time.minute}");
-    if (time.hour >= 6) {
-      controller.changeStyle('white');
-    } else if (time.hour < 18) {
-      controller.changeStyle('dark');
-    }
+  @override
+  void dispose() {
+    _isDisposed = true;
+    super.dispose();
   }
 
   @override
@@ -71,8 +68,4 @@ class _HomePageState extends State<HomePage> {
       },
     );
   }
-
-  // Widget _DetailSheet(){
-  //   return BottomSheet(onClosing: onClosing, builder: builder)
-  // }
 }

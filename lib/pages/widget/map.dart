@@ -41,12 +41,19 @@ class _MapViewState extends State<MapView> {
   String dataa = '';
   String unit = '';
   String dateRage = "";
+  bool _isDisposed = false;
 
   @override
   void initState() {
     super.initState();
 
     getSensorDetails();
+  }
+
+  @override
+  void dispose() {
+    _isDisposed = true; // Set the flag to true when disposing the widget
+    super.dispose();
   }
 
   void _setDate() {
@@ -60,14 +67,20 @@ class _MapViewState extends State<MapView> {
       dateRage =
           "${formatterr.format(now.subtract(const Duration(days: 6)))} to ${formatterr.format(now)}";
       dataEncrypt(1, _displayedDate, formatter.format(now));
-      setState(() {});
+      if (!_isDisposed) {
+        setState(() {});
+      }
     } else {
       _displayedDate = formatter.format(now);
     }
   }
 
   Future<void> getSensorDetails() async {
-    isLoading = true;
+    if (_isDisposed) return;
+    setState(() {
+      isLoading = true;
+    });
+
     var response = await http.get(
         Uri.parse('${config.baseUrl}${config.SensorByStationId}'),
         headers: {
@@ -75,6 +88,7 @@ class _MapViewState extends State<MapView> {
           'Authorization': config.bearer_token,
           'apiKey': config.apiKey
         });
+
     if (response.statusCode == 200) {
       Map<String, dynamic> data = jsonDecode(response.body);
       List<SensorByStationId> Sensors = (data['stationDetails'] as List)
@@ -84,9 +98,6 @@ class _MapViewState extends State<MapView> {
       for (var sensors in Sensors) {
         String names = sensors.StationName;
         stationNames.add(names);
-        setState(() {
-          Data.stationNames = stationNames;
-        });
 
         double lat = sensors.Latitude;
         double long = sensors.Longitude;
@@ -94,11 +105,6 @@ class _MapViewState extends State<MapView> {
         routpointss.add(LatLng(lat.toDouble(), long.toDouble()));
         List<Sensorss> senss = sensors.sensors;
 
-        setState(() {
-          Data.routpoints = routpointss;
-        });
-
-        // ReportDataService().dataEncrypt(sensors.StationId);
         for (var sens in senss) {
           List<SensorParameters> senpar = sens.sensorParameters;
           for (var dates in senpar) {
@@ -107,14 +113,29 @@ class _MapViewState extends State<MapView> {
             String time = timeMid.sublist(0, 2).join(':');
             String dateTime = '${dates.Date}  $time';
             updateddate.add(dateTime);
+            String da = dates.Data;
+            double dat = double.parse(da);
+            String dataaa = dat.toStringAsFixed(2);
+            dataa = dataaa;
           }
         }
-        setState(() {
-          isLoading = false;
-        });
+
+        if (!_isDisposed) {
+          setState(() {
+            Data.stationNames = stationNames;
+            Data.routpoints = routpointss;
+            isLoading = false;
+          });
+        }
+
         _setDate();
       }
     } else {
+      if (!_isDisposed) {
+        setState(() {
+          isLoading = false;
+        });
+      }
       throw Exception('error');
     }
   }
@@ -123,17 +144,22 @@ class _MapViewState extends State<MapView> {
     String encId = encryptAES(id.toString(), Data.AesKey);
     String da1 = encryptAES(d1, Data.AesKey);
     String da2 = encryptAES(d2, Data.AesKey);
-    setState(() {
-      Data.stationIds = encId;
-      Data.date1 = da1;
-      Data.date2 = da2;
-    });
-
+    if (!_isDisposed) {
+      setState(() {
+        Data.stationIds = encId;
+        Data.date1 = da1;
+        Data.date2 = da2;
+      });
+    }
     reportDatafetch(encId, da1, da2);
   }
 
   Future<void> reportDatafetch(String id, String d1, String d2) async {
-    isLoading = true;
+    if (_isDisposed) return;
+    setState(() {
+      isLoading = true;
+    });
+
     var response = await http.get(
         Uri.parse(
             '${config.baseUrl}${config.ReportData}?stationIds=$id&fromDate=$d1&toDate=$d2'),
@@ -142,6 +168,7 @@ class _MapViewState extends State<MapView> {
           "apiKey": config.apiKey,
           "Content-type": "application/json"
         });
+
     if (response.statusCode == 200) {
       Map<String, dynamic> data = jsonDecode(response.body);
 
@@ -158,8 +185,6 @@ class _MapViewState extends State<MapView> {
             unit = senss.Unit;
             List<RsensorDataPoint> sensss = senss.datapoints;
             for (var sens in sensss) {
-              dataa = sens.Data;
-
               final chartDatas = ChartData(
                 DateTime.parse("${sens.Date}T${sens.Time}"),
                 double.parse(sens.Data),
@@ -167,18 +192,23 @@ class _MapViewState extends State<MapView> {
               chartData.add(chartDatas);
               Keys().chartDataSet(chartData);
             }
-            setState(() {
-              isLoading = false;
-            });
           }
         }
       }
 
-      // setState(() {
-      //   _users = list;
-      // });
+      if (!_isDisposed) {
+        setState(() {
+          isLoading = false;
+        });
+      }
     } else if (response.statusCode == 401) {
       RefreshToken().refreshToken();
+    } else {
+      if (!_isDisposed) {
+        setState(() {
+          isLoading = false;
+        });
+      }
     }
   }
 
@@ -190,13 +220,15 @@ class _MapViewState extends State<MapView> {
         : Stack(children: [
             FlutterMap(
               options: MapOptions(
-                  center: routpointss[0],
-                  zoom: 10,
-                  onTap: ((tapPosition, point) => {
-                        setState(() {
-                          isOpen = false;
-                        })
-                      })),
+                center: routpointss[0],
+                zoom: 10,
+                maxZoom: 18.4,
+                onTap: ((tapPosition, point) => {
+                      setState(() {
+                        isOpen = false;
+                      })
+                    }),
+              ),
               children: [
                 TileLayer(
                   urlTemplate: controller.mapStyle,

@@ -1,0 +1,1 @@
+ /Users/trideltechnologiespvtltd/Dev/Projects/tems/final_tems/.dart_tool/flutter_build/d42d83827f53830e3254f4f359e84f12/native_assets.yaml: 

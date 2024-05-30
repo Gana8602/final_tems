@@ -19,6 +19,7 @@ import '../../../model/chart_model.dart';
 
 class ChartF extends StatefulWidget {
   final bool isSelected;
+
   const ChartF({super.key, required this.isSelected});
 
   @override
@@ -85,6 +86,7 @@ class ChartFmState extends State<ChartFm> {
             ? DateTimeIntervalType.days
             : DateTimeIntervalType.hours,
         isInversed: false,
+        // isVisible: false,
         labelStyle: const TextStyle(fontSize: 8),
         dateFormat: DateFormat('MM-dd  HH:mm'),
         labelRotation: -80,

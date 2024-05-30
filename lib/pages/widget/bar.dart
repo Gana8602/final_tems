@@ -1,6 +1,7 @@
 // ignore_for_file: non_constant_identifier_names
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../utils/style.dart';
 
@@ -16,27 +17,16 @@ PreferredSize Head(BuildContext context) => PreferredSize(
               bottomRight: Radius.circular(30), // Adjust radius as needed
             ),
           ),
-          // leading: Padding(
-          //   padding: const EdgeInsets.only(left: 8.0),
-          //   child: Container(
-          //     height: 60,
-          //     width: 70,
-          //     decoration: BoxDecoration(
-          //         image: DecorationImage(
-          //             image: AssetImage('assets/image/logo-1.png'),
-          //             fit: BoxFit.cover)),
-          //   ),
-          // ),
           title: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Container(
                 height: 60,
-                width: 70,
+                width: 60,
                 decoration: const BoxDecoration(
                     image: DecorationImage(
-                        image: AssetImage('assets/image/logo2.png'),
+                        image: AssetImage('assets/image/looogo.png'),
                         fit: BoxFit.cover)),
               ),
               const SizedBox(
@@ -62,5 +52,6 @@ PreferredSize Head(BuildContext context) => PreferredSize(
                 );
               },
             ),
-          ]),
+          ],
+          systemOverlayStyle: SystemUiOverlayStyle.light),
     );

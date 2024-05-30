@@ -4,7 +4,7 @@
     <uses-permission android:name="android.permission.INTERNET"/>
 
    <application
-        android:label="Tems"
+        android:label="Tide View"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

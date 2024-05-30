@@ -1,0 +1,18 @@
+<lint-module
+    format="1"
+    dir="/Users/trideltechnologiespvtltd/Dev/Projects/tems/final_tems/android/app"
+    name=":app"
+    type="APP"
+    maven="android:app:"
+    gradle="7.2.0"
+    buildFolder="/Users/trideltechnologiespvtltd/Dev/Projects/tems/final_tems/build/app"
+    bootClassPath="/Users/trideltechnologiespvtltd/Library/Android/sdk/platforms/android-34/android.jar:/Users/trideltechnologiespvtltd/Library/Android/sdk/build-tools/30.0.3/core-lambda-stubs.jar"
+    javaSourceLevel="1.8"
+    compileTarget="android-34">
+  <lintOptions
+      abortOnError="true"
+      absolutePaths="true"
+      checkReleaseBuilds="true"
+      explainIssues="true"/>
+  <variant name="release"/>
+</lint-module>

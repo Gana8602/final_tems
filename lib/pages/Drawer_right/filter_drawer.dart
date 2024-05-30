@@ -25,7 +25,7 @@ class _FilterDrawerState extends State<FilterDrawer> {
   String? selectedMonth;
   bool isTick = false;
   List<String> Categories5 = ['Date Range', 'Weekly', 'Monthly', 'Yearly'];
-  List<String> Categories6 = ['Date Range', 'Monthly'];
+  List<String> Categories6 = ['Date Range'];
   // ignore: non_constant_identifier_names
   final DateDAta _DAteController = Get.put(DateDAta());
   final MultiSelectController _controller = MultiSelectController();
@@ -75,40 +75,74 @@ class _FilterDrawerState extends State<FilterDrawer> {
 
   Future<void> _selectDateTime(BuildContext context, String find) async {
     final DateTime now = DateTime.now();
+    final DateTime oneMinuteBeforeNow =
+        now.subtract(const Duration(minutes: 1));
     final DateTime firstSelectableDate = now.subtract(const Duration(days: 31));
     final DateTime lastSelectableDate = now;
+
     final DateTime? pickedDate = await showDatePicker(
       context: context,
-      initialDate: _selectedDateTime ?? DateTime.now(),
+      initialDate: _selectedDateTime ?? now,
       firstDate:
           Data.role == 'ROLE_ADMIN' ? DateTime(2000) : firstSelectableDate,
       lastDate: lastSelectableDate,
       selectableDayPredicate: (DateTime date) {
-        return
-            // date.isAfter(firstSelectableDate)
-            // &&
-            date.isBefore(lastSelectableDate);
+        return date.isBefore(lastSelectableDate);
       },
     );
-    if (pickedDate != null) {
-      final TimeOfDay? pickedTime = await showTimePicker(
-        context: context,
-        initialTime:
-            TimeOfDay.fromDateTime(_selectedDateTime ?? DateTime.now()),
-      );
-      setState(() {
-        _selectedDateTime = DateTime(pickedDate.year, pickedDate.month,
-            pickedDate.day, pickedTime!.hour, pickedTime.minute);
-        if (find == 'one') {
-          _daterangef.text =
-              "${_selectedDateTime!.year}-${_selectedDateTime!.month.toString().padLeft(2, '0')}-${_selectedDateTime!.day.toString().padLeft(2, '0')}T${_selectedDateTime!.hour}:${_selectedDateTime!.minute}:50";
-        } else if (find == 'two') {
-          _daterangel.text =
-              "${_selectedDateTime!.year}-${_selectedDateTime!.month.toString().padLeft(2, '0')}-${_selectedDateTime!.day.toString().padLeft(2, '0')}T${_selectedDateTime!.hour}:${_selectedDateTime!.minute}:50";
-        }
 
-        // Format the selected date as a string with only the date part
-      });
+    if (pickedDate != null) {
+      TimeOfDay? pickedTime;
+      bool validTime = false;
+
+      while (!validTime) {
+        pickedTime = await showTimePicker(
+          context: context,
+          initialTime: TimeOfDay.fromDateTime(_selectedDateTime ?? now),
+        );
+
+        if (pickedTime != null) {
+          final DateTime selectedDateTime = DateTime(
+            pickedDate.year,
+            pickedDate.month,
+            pickedDate.day,
+            pickedTime.hour,
+            pickedTime.minute,
+          );
+
+          if (selectedDateTime.isBefore(oneMinuteBeforeNow)) {
+            validTime = true;
+          } else {
+            toaster().showsToast(
+                'Please select a time at least 1 minute before the current time.',
+                Colors.red,
+                Colors.white);
+          }
+        } else {
+          // User cancelled the time picker
+          break;
+        }
+      }
+
+      if (pickedTime != null && validTime) {
+        setState(() {
+          _selectedDateTime = DateTime(
+            pickedDate.year,
+            pickedDate.month,
+            pickedDate.day,
+            pickedTime!.hour,
+            pickedTime.minute,
+          );
+
+          if (find == 'one') {
+            _daterangef.text =
+                "${_selectedDateTime!.year}-${_selectedDateTime!.month.toString().padLeft(2, '0')}-${_selectedDateTime!.day.toString().padLeft(2, '0')}T${_selectedDateTime!.hour}:${_selectedDateTime!.minute.toString().padLeft(2, '0')}:50";
+          } else if (find == 'two') {
+            _daterangel.text =
+                "${_selectedDateTime!.year}-${_selectedDateTime!.month.toString().padLeft(2, '0')}-${_selectedDateTime!.day.toString().padLeft(2, '0')}T${_selectedDateTime!.hour}:${_selectedDateTime!.minute.toString().padLeft(2, '0')}:50";
+          }
+        });
+      }
     }
   }
 

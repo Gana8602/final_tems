@@ -36,6 +36,7 @@ class _DashBoardState extends State<DashBoard> {
   List<String> StationNames = [];
   String _selectedItem = Data.stationNames.first;
   List<dynamic> datas = [];
+  String ParaName = '';
   @override
   void initState() {
     super.initState();
@@ -74,13 +75,17 @@ class _DashBoardState extends State<DashBoard> {
           for (var parameter in param) {
             String name = parameter.ParamName;
             String unit = parameter.Unit;
-            String value = parameter.Data;
+            String val = parameter.Data;
+            double valu = double.parse(val);
+            String value = valu.toStringAsFixed(2);
+
             String date = parameter.Date;
             String times = parameter.Time;
             List<String> timem = times.split(':');
             String time = timem.sublist(0, 2).join(':');
 
             setState(() {
+              ParaName = name;
               todaydate = "$date $time";
             });
 
@@ -233,24 +238,23 @@ class _DashBoardState extends State<DashBoard> {
                           ),
                         ),
                       ),
+
+                      // const Text('Buoy Watch Circle'),
                       const SizedBox(
                         height: 20,
                       ),
-                      // const Text('Buoy Watch Circle'),
-                      const SizedBox(
-                        height: 10,
-                      ),
-
-                      const SizedBox(
-                        height: 15,
-                      ),
-                      const Text('Water'),
-                      const SizedBox(
-                        height: 15,
-                      ),
 
                       Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 8.0),
+                            child: Text(
+                              ParaName,
+                              style: const TextStyle(fontSize: 18),
+                            ),
+                          ),
                           for (int i = 0; i < datas.length; i++)
                             Padding(
                               padding: const EdgeInsets.all(8.0),
